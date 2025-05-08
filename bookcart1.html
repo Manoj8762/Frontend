@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBook Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        #searchBox {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .book-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .book-card {
+            width: 250px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .book-card:hover {
+            transform: scale(1.05);
+        }
+        .book-cover {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        h2 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .author {
+            color: #777;
+            font-size: 14px;
+        }
+        .price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 10px 0;
+        }
+        .availability {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .available {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .not-available {
+            background-color: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📚 eBook Store</h1>
+    <input type="text" id="searchBox" placeholder="Search for a book..." onkeyup="searchBook()">
+
+    <div class="book-container" id="bookContainer"></div>
+
+    <script>
+        const bookTitles = [
+            "The Lost Kingdom", "Secrets of the Universe", "Beyond the Stars", "Mystic Tales", "The Final Hour",
+            "Echoes of Time", "Digital Fortress", "Shadows of the Past", "The Unseen World", "Dawn of Legends",
+            "Whispers in the Dark", "The Last Odyssey", "Hidden Truths", "Chronicles of the Unknown",
+            "The Art of War", "The Silent Witness", "Dreams and Nightmares", "Future Imperfect", "The Frozen Path",
+            "Light and Darkness", "Celestial Journey", "The Burning Sky", "Timeless Wonder", "The Cursed Scroll",
+            "Epic Tales of Valor", "A Dance with Shadows", "Rise of the Fallen", "Moonlit Mysteries", "Legends Reborn",
+            "Into the Wild", "Stormbreaker", "Beyond Reality", "The Secret Chamber", "The Infinite Loop",
+            "Guardians of the Realm", "Lost in Time", "Wonders of the Deep", "The Last Stand", "Embers of the Past",
+            "The Golden Compass", "Echoes from the Abyss", "Parallel Realms", "The Awakening", "Vortex of Destiny",
+            "The Forgotten City", "Revolutionary Minds", "Breaking the Code", "Tales of the Ancient", "The Eternal Quest",
+            "Voyage to the Unknown", "Realm of Dreams", "The Untold Saga", "Dark Prophecy", "Survivor's Chronicles",
+            "The Astral Wars", "Rise of the Titans", "A Legacy of Shadows", "Secrets of the Mind", "The Vanishing Point",
+            "Code Breakers", "The Crimson Crown", "Path of the Warrior", "The Quantum Paradox", "Beyond Imagination",
+            "The Enchanted Forest", "Mysteries of the East", "The Celestial War", "Fate of the Universe",
+            "The Phantom's Curse", "Legends of Atlantis", "The Sands of Time", "The Forgotten Legends",
+            "The Cyber Age", "Portal to the Unknown", "The Eternal Flame", "Tales of the Fallen",
+            "The Oracle's Prophecy", "The Sorcerer's Secret", "The Enigma Code", "Into the Abyss",
+            "The Titan's Wrath", "Bloodlines of the Ancients", "Rebirth of the Phoenix", "The Last Enchanter",
+            "Chronicles of the Forsaken", "The Divine Order", "The Maze of Destiny", "Journey to the Unknown",
+            "The Dark Conspiracy", "The Secret of the Phoenix", "The Shadow War", "Legends of the Moon",
+            "The Lightbringer", "The Shattered Empire", "The Crimson Tide", "The Rising Sun", "The Eternal Night",
+            "Legacy of the Dragon", "The Ultimate Betrayal", "The Hidden Passage"
+        ];
+
+        const authors = ["John Smith", "Alice Johnson", "Michael Brown", "Emily Davis", "Robert Wilson",
+            "Sophia Martinez", "David Clark", "Isabella Lewis", "James White", "Charlotte Hall"];
+
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generateBooks() {
+            const bookContainer = document.getElementById("bookContainer");
+
+            for (let i = 0; i < 100; i++) {
+                let title = bookTitles[i];
+                let author = getRandomElement(authors);
+                let price = (Math.random() * (30 - 5) + 5).toFixed(2);
+                let available = Math.random() > 0.3; // 70% chance it's in stock
+
+                // Generate unique book cover using Unsplash API
+                let bookCover = `https://source.unsplash.com/200x300/?book,novel&sig=${i}`;
+
+                // Create book card
+                let bookCard = document.createElement("div");
+                bookCard.classList.add("book-card");
+                bookCard.setAttribute("data-title", title.toLowerCase());
+
+                bookCard.innerHTML = `
+                    <img class="book-cover" src="${bookCover}" alt="Book Cover">
+                    <h2>${title}</h2>
+                    <p class="author">By ${author}</p>
+                    <p class="price">$${price}</p>
+                    <p class="availability ${available ? 'available' : 'not-available'}">
+                        ${available ? '🟢 In Stock' : '🔴 Out of Stock'}
+                    </p>
+                `;
+
+                bookContainer.appendChild(bookCard);
+            }
+        }
+
+        function searchBook() {
+            let input = document.getElementById("searchBox").value.toLowerCase();
+            let books = document.querySelectorAll(".book-card");
+
+            books.forEach(book => {
+                let title = book.getAttribute("data-title");
+                book.style.display = title.includes(input) ? "block" : "none";
+            });
+        }
+
+        generateBooks();
+    </script>
+
+</body>
+</html>
