@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBook Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        select, input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .book-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .book-card {
+            width: 250px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .book-card:hover {
+            transform: scale(1.05);
+        }
+        .book-cover {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+        .btn-read {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-download {
+            background-color: #2ecc71;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 eBook Store</h1>
+    <div class="controls">
+        <input type="text" id="searchBox" placeholder="Search for a book..." onkeyup="filterBooks()">
+        <select id="categoryFilter" onchange="filterBooks()">
+            <option value="all">All Categories</option>
+        </select>
+        <select id="authorFilter" onchange="filterBooks()">
+            <option value="all">All Authors</option>
+        </select>
+    </div>
+    <div class="book-container" id="bookContainer"></div>
+    
+    <script>
+        const categories = ["Computer Science", "Electronics And Communication", "Mechanical", "Electrical And Electronics", "Civil"];
+        const authors = ["Author A", "Author B", "Author C", "Author D", "Author E"];
+        let books = [];
+
+        function generateBooks() {
+            const bookContainer = document.getElementById("bookContainer");
+            bookContainer.innerHTML = "";
+            books = [];
+
+            for (let i = 0; i < 5000; i++) {
+                let category = categories[Math.floor(i / 1000)];
+                let title = `Book Title ${i + 1}`;
+                let author = authors[i % authors.length];
+                let price = (Math.random() * (30 - 5) + 5).toFixed(2);
+                let available = i % 2 === 0;
+                let bookCover = `https://source.unsplash.com/200x300/?book&sig=${i}`;
+                let bookLink = `https://example.com/book${i + 1}`;
+                let downloadLink = `https://example.com/download/book${i + 1}.pdf`;
+                books.push({ title, author, category, price: parseFloat(price), available, bookCover, bookLink, downloadLink });
+            }
+            populateDropdowns();
+            displayBooks(books);
+        }
+
+        function populateDropdowns() {
+            const categoryDropdown = document.getElementById("categoryFilter");
+            const authorDropdown = document.getElementById("authorFilter");
+            categoryDropdown.innerHTML = '<option value="all">All Categories</option>';
+            authorDropdown.innerHTML = '<option value="all">All Authors</option>';
+            categories.forEach(category => categoryDropdown.innerHTML += `<option value="${category}">${category}</option>`);
+            let uniqueAuthors = [...new Set(books.map(book => book.author))];
+            uniqueAuthors.forEach(author => authorDropdown.innerHTML += `<option value="${author}">${author}</option>`);
+        }
+
+        function displayBooks(bookList) {
+            const bookContainer = document.getElementById("bookContainer");
+            bookContainer.innerHTML = "";
+            bookList.forEach(book => {
+                let bookCard = document.createElement("div");
+                bookCard.classList.add("book-card");
+                bookCard.innerHTML = `
+                    <img class="book-cover" src="${book.bookCover}" alt="Book Cover">
+                    <h2>${book.title}</h2>
+                    <p>By ${book.author}</p>
+                    <p>Category: ${book.category}</p>
+                    <p>Price: $${book.price}</p>
+                    <p>${book.available ? '🟢 In Stock' : '🔴 Out of Stock'}</p>
+                    <a class="btn btn-read" href="${book.bookLink}" target="_blank">📖 Read Online</a>
+                    <a class="btn btn-download" href="${book.downloadLink}" download>⬇️ Download</a>
+                `;
+                bookContainer.appendChild(bookCard);
+            });
+        }
+
+        function filterBooks() {
+            let searchInput = document.getElementById("searchBox").value.toLowerCase();
+            let selectedCategory = document.getElementById("categoryFilter").value;
+            let selectedAuthor = document.getElementById("authorFilter").value;
+
+            let filteredBooks = books.filter(book => book.title.toLowerCase().includes(searchInput) &&
+                (selectedCategory === "all" || book.category === selectedCategory) &&
+                (selectedAuthor === "all" || book.author === selectedAuthor)
+            );
+            displayBooks(filteredBooks);
+        }
+
+        generateBooks();
+    </script>
+</body>
+</html>
+
+<!--DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBook Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        select, input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .book-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .book-card {
+            width: 250px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .book-card:hover {
+            transform: scale(1.05);
+        }
+        .book-cover {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        h2 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .author {
+            color: #777;
+            font-size: 14px;
+        }
+        .price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 10px 0;
+        }
+        .availability {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .available {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .not-available {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .book-actions {
+            margin-top: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+        .btn-read {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-read:hover {
+            background-color: #2980b9;
+        }
+        .btn-download {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .btn-download:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 eBook Store</h1>
+    <div class="controls">
+        <input type="text" id="searchBox" placeholder="Search for a book..." onkeyup="filterBooks()">
+        <select id="categoryFilter" onchange="filterBooks()">
+            <option value="all">All Categories</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Electronics And Communication">Electronics And Communication</option>
+            <option value="Mechanical">Mechanical</option>
+            <option value="Electrical And Electronics">Electrical And Electronics</option>
+            <option value="Civil">Civil</option>
+        </select>
+        <select id="authorFilter" onchange="filterBooks()">
+            <option value="all">All Authors</option>
+        </select>
+    </div>
+    <div class="book-container" id="bookContainer"></div>
+
+    <script>
+        const categories = ["Computer Science", "Electronics And Communication", "Mechanical", "Electrical And Electronics", "Civil"];
+        const authors = [
+            { name: 'Dimitri Bertsekas', domain: 'Computer Science' },
+            { name: 'William Stallings', domain: 'Computer Science' },
+            { name: 'J. David Irwin', domain: 'Electrical And Electronics' },
+            { name: 'Sudhir Shelke', domain: 'Electronics And Communication' },
+            { name: 'Pramod B. Patil', domain: 'Electronics And Communication' },
+            { name: 'B. Somanathan Nair', domain: 'Electronics And Communication' },
+            { name: 'S.R. Deepa', domain: 'Electronics And Communication' },
+            { name: 'Rohit Khurana', domain: 'Electronics And Communication' },
+            { name: 'Sandeep Joshi', domain: 'Electronics And Communication' },
+            { name: 'R. Agor', domain: 'Civil' },
+            { name: 'B.C. Punmia', domain: 'Civil' },
+            { name: 'A.K. Jain', domain: 'Civil' },
+            { name: 'S.S. Rattan', domain: 'Civil' },
+            { name: 'P.N. Modi', domain: 'Civil' }
+        ];
+
+        let books = [];
+
+        function generateBooks() {
+            const bookContainer = document.getElementById("bookContainer");
+            bookContainer.innerHTML = "";
+            books = [];
+
+            for (let i = 0; i < 100; i++) {
+                let title = `Book Title ${i + 1}`;
+                let authorObj = authors[i % authors.length];
+                let category = categories[i % categories.length];
+                let price = (Math.random() * (30 - 5) + 5).toFixed(2);
+                let available = i % 2 === 0;
+                let bookCover = `https://source.unsplash.com/200x300/?book,novel&sig=${i}`;
+                let bookLink = `https://example.com/book${i + 1}`;
+                let downloadLink = `https://example.com/download/book${i + 1}.pdf`;
+
+                let bookData = { title, author: authorObj.name, category, price: parseFloat(price), available, bookCover, bookLink, downloadLink };
+                books.push(bookData);
+            }
+
+            populateAuthorDropdown();
+            displayBooks(books);
+        }
+
+        function populateAuthorDropdown() {
+            const authorDropdown = document.getElementById("authorFilter");
+            authorDropdown.innerHTML = `<option value="all">All Authors</option>`;
+            let uniqueAuthors = [...new Set(books.map(book => book.author))];
+
+            uniqueAuthors.forEach(author => {
+                let option = document.createElement("option");
+                option.value = author;
+                option.textContent = author;
+                authorDropdown.appendChild(option);
+            });
+        }
+
+        function displayBooks(bookList) {
+            const bookContainer = document.getElementById("bookContainer");
+            bookContainer.innerHTML = "";
+            bookList.forEach(book => {
+                let bookCard = document.createElement("div");
+                bookCard.classList.add("book-card");
+                bookCard.innerHTML = `
+                    <img class="book-cover" src="${book.bookCover}" alt="Book Cover">
+                    <h2>${book.title}</h2>
+                    <p class="author">By ${book.author}</p>
+                    <p class="price">$${book.price}</p>
+                    <p class="availability ${book.available ? 'available' : 'not-available'}">
+                        ${book.available ? '🟢 In Stock' : '🔴 Out of Stock'}
+                    </p>
+                    <div class="book-actions">
+                        <a class="btn btn-read" href="${book.bookLink}" target="_blank">📖 Read Online</a>
+                        <a class="btn btn-download" href="${book.downloadLink}" download>⬇️ Download</a>
+                    </div>
+                `;
+                bookContainer.appendChild(bookCard);
+            });
+        }
+
+        function filterBooks() {
+            let searchInput = document.getElementById("searchBox").value.toLowerCase();
+            let selectedCategory = document.getElementById("categoryFilter").value;
+            let selectedAuthor = document.getElementById("authorFilter").value;
+
+            let filteredBooks = books.filter(book => book.title.toLowerCase().includes(searchInput) && 
+                (selectedCategory === "all" || book.category === selectedCategory) &&
+                (selectedAuthor === "all" || book.author === selectedAuthor)
+            );
+
+            displayBooks(filteredBooks);
+        }
+
+        generateBooks();
+    </script>
+</body>
+</html-->
